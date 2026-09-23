@@ -557,20 +557,14 @@ const diccionario = {
 
 /*
 ====================================================
-             DICCIONARIO INVERSO
+              DICCIONARIO INVERSO
 ====================================================
 */
 
 const inverso = {};
 
 for (const palabra in diccionario) {
-
     const traduccion = diccionario[palabra];
-
-    /*
-    Solo ponemos la primera equivalencia
-    para evitar conflictos.
-    */
 
     if (!inverso[traduccion]) {
         inverso[traduccion] = palabra;
@@ -580,44 +574,40 @@ for (const palabra in diccionario) {
 
 /*
 ====================================================
-                 TRADUCCIÓN
+                  TRADUCCIÓN
 ====================================================
 */
 
 function traducir() {
 
-    const texto =
-        document.getElementById("entrada").value;
+    const entrada =
+        document.getElementById("entrada");
+
+    const salida =
+        document.getElementById("salida");
 
     const direccion =
-        document.getElementById("direccion").value;
+        document.getElementById("direccion");
+
+
+    const texto = entrada.value;
 
 
     if (!texto.trim()) {
-
-        document.getElementById("salida").value = "";
-
+        salida.value = "";
         return;
     }
 
 
     const diccionarioActual =
-        direccion === "es-pan"
+        direccion.value === "es-pan"
             ? diccionario
             : inverso;
 
 
     /*
-    Ordenamos por longitud.
-
-    Así:
-
-        "por favor"
-
-    se traduce antes que:
-
-        "por"
-
+    Ordenamos de mayor a menor longitud.
+    Así "por favor" se procesa antes que "por".
     */
 
     const palabras =
@@ -625,55 +615,67 @@ function traducir() {
         .sort((a, b) => b.length - a.length);
 
 
-    let resultado = texto;
+    /*
+    Creamos UNA SOLA expresión regular.
+    */
+
+    const escapadas = palabras.map(palabra => {
+
+        return palabra.replace(
+            /[.*+?^${}()|[\]\\]/g,
+            "\\$&"
+        );
+
+    });
 
 
-    for (const palabra of palabras) {
+    const regex = new RegExp(
+        "(^|[^A-Za-zÁÉÍÓÚÜÑáéíóúüñ])(" +
+        escapadas.join("|") +
+        ")(?=$|[^A-Za-zÁÉÍÓÚÜÑáéíóúüñ])",
+        "gi"
+    );
 
-        /*
-        Escapar caracteres especiales
-        para crear una expresión regular.
-        */
 
-        const escapada =
-            palabra.replace(
-                /[.*+?^${}()|[\]\\]/g,
-                "\\$&"
+    const resultado = texto.replace(
+        regex,
+        (coincidencia, antes, palabraEncontrada) => {
+
+            const clave =
+                palabras.find(
+                    palabra =>
+                        palabra.toLowerCase() ===
+                        palabraEncontrada.toLowerCase()
+                );
+
+
+            if (!clave) {
+                return coincidencia;
+            }
+
+
+            const traduccion =
+                diccionarioActual[clave];
+
+
+            return (
+                antes +
+                mantenerMayusculas(
+                    palabraEncontrada,
+                    traduccion
+                )
             );
+        }
+    );
 
 
-        const regex =
-            new RegExp(
-                "\\b" + escapada + "\\b",
-                "gi"
-            );
-
-
-        resultado =
-            resultado.replace(
-                regex,
-                coincidencia => {
-
-                    const traduccion =
-                        diccionarioActual[palabra];
-
-                    return mantenerMayusculas(
-                        coincidencia,
-                        traduccion
-                    );
-                }
-            );
-    }
-
-
-    document.getElementById("salida").value =
-        resultado;
+    salida.value = resultado;
 }
 
 
 /*
 ====================================================
-            MANTENER MAYÚSCULAS
+             MAYÚSCULAS
 ====================================================
 */
 
@@ -687,8 +689,8 @@ function mantenerMayusculas(original, nuevo) {
 
 
     if (
-        original[0] ===
-        original[0].toUpperCase()
+        original.length > 0 &&
+        original[0] === original[0].toUpperCase()
     ) {
 
         return (
@@ -753,8 +755,13 @@ function copiar() {
         document.getElementById("salida").value;
 
 
+    if (!texto) {
+        return;
+    }
+
+
     navigator.clipboard.writeText(texto);
 
 }
-
+   
 </script></body></html>
