@@ -1,8 +1,4 @@
-```html
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
+<html lang="es"><head></head><body><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Traductor Español ↔ Panchito</title>
@@ -139,16 +135,16 @@
         }
     }
 </style>
-</head>
 
-<body>
+
+
 
 <div class="app">
 
-    <h1>Traductor Español ↔ Panchito</h1>
+    <h1>Traductor Juan ↔ Panchopanchet</h1>
 
     <div class="subtitulo">
-        Traductor de palabras y expresiones
+        Traductor para hablar con panchos
     </div>
 
     <div class="selector">
@@ -176,10 +172,7 @@
                 ESPAÑOL / PANCHITO
             </div>
 
-            <textarea
-                id="entrada"
-                placeholder="Escribe una frase..."
-            ></textarea>
+            <textarea id="entrada" placeholder="Escribe una frase..."></textarea>
 
         </div>
 
@@ -190,11 +183,7 @@
                 TRADUCCIÓN
             </div>
 
-            <textarea
-                id="salida"
-                placeholder="Aquí aparecerá la traducción..."
-                readonly
-            ></textarea>
+            <textarea id="salida" placeholder="Aquí aparecerá la traducción..." readonly=""></textarea>
 
         </div>
 
@@ -207,17 +196,11 @@
             Traducir
         </button>
 
-        <button
-            class="secundario"
-            onclick="intercambiar()"
-        >
+        <button class="secundario" onclick="intercambiar()">
             ↔ Intercambiar
         </button>
 
-        <button
-            class="secundario"
-            onclick="copiar()"
-        >
+        <button class="secundario" onclick="copiar()">
             Copiar
         </button>
 
@@ -241,12 +224,9 @@ El diccionario inverso se genera automáticamente.
 */
 
 
-```js
 const diccionario = {
 
-    /* =========================
-       PERSONAS
-    ========================= */
+    /* PERSONAS */
 
     "amigo": "carnal",
     "amiga": "carnala",
@@ -263,337 +243,172 @@ const diccionario = {
     "chicos": "chavos",
     "chicas": "chavas",
 
-    "joven": "chavo",
-    "jóvenes": "chavos",
+    "padre": "jefe",
+    "madre": "jefa",
+
+    "papá": "jefe",
+    "mamá": "jefa",
 
     "hombre": "vato",
     "mujer": "morra",
 
-    "señor": "señor",
-    "señora": "señora",
-
-    "padre": "jefe",
-    "madre": "jefa",
-    "papá": "jefe",
-    "mamá": "jefa",
-
-    "abuelo": "abuelito",
-    "abuela": "abuelita",
-
-    "hermano": "carnal",
-    "hermana": "carnala",
-
-    "primo": "primo",
-    "prima": "prima",
-
-    "novio": "vato",
-    "novia": "morra",
-
-    "bebé": "chamaco",
-
     "persona": "vato",
-    "gente": "raza",
 
-    "policía": "poli",
-    "jefe": "patrón",
-    "profesor": "profe",
-    "profesora": "profe",
 
-    /* =========================
-       CASA
-    ========================= */
+    /* CASA */
 
     "casa": "cantón",
-    "hogar": "cantón",
-
     "habitación": "cuarto",
-    "dormitorio": "cuarto",
     "salón": "cuarto",
-
-    "cocina": "cocina",
-    "baño": "baño",
-    "puerta": "puerta",
-    "ventana": "ventana",
-
-    "cama": "cama",
-    "mesa": "mesa",
-    "silla": "silla",
-    "sofá": "sillón",
-
-    "armario": "clóset",
-    "espejo": "espejo",
-
-    "nevera": "refri",
-    "frigorífico": "refri",
-    "congelador": "congelador",
-
-    "televisión": "tele",
-    "televisor": "tele",
-    "tele": "tele",
-
-    "móvil": "celular",
-    "teléfono": "celular",
-
-    "ordenador": "computadora",
-    "computadora": "computadora",
-
-    "cargador": "cargador",
-    "enchufe": "contacto",
-
-    "bombilla": "foco",
-    "luz": "luz",
-
-    "basura": "basura",
-    "cubo": "bote",
-
-    "bolsa": "bolsa",
-    "caja": "caja",
-
-    /* =========================
-       TRANSPORTE
-    ========================= */
 
     "coche": "carro",
     "auto": "carro",
     "automóvil": "carro",
 
-    "coche pequeño": "carrito",
+    "moto": "moto",
+
+    "piscina": "pileta",
+    "bañera": "tina",
+
+    "nevera": "refri",
+    "frigorífico": "refri",
+
+    "ordenador": "computadora",
+    "computadora": "computadora",
+
+    "móvil": "celular",
+    "teléfono": "celular",
 
     "autobús": "camión",
     "bus": "camión",
 
-    "camión": "camión",
-
-    "taxi": "taxi",
-
-    "moto": "moto",
-    "motocicleta": "moto",
-
-    "bicicleta": "bici",
-
-    "patinete": "scooter",
-
     "avión": "avión",
-    "barco": "lancha",
 
-    "conductor": "chofer",
 
-    "carretera": "carretera",
-    "autopista": "autopista",
-    "gasolinera": "gasolinera",
+    /* COMIDA */
 
-    "gasolina": "gas",
-
-    "aparcar": "estacionar",
-    "aparcarse": "estacionarse",
-
-    /* =========================
-       COMIDA
-    ========================= */
-
-    "comida": "comida",
-    "alimento": "comida",
-
-    "desayuno": "desayuno",
-    "comida": "comida",
-    "cena": "cena",
-
-    "pan": "pan",
-    "panecillo": "bolillo",
-
-    "bocadillo": "torta",
-    "sándwich": "lonche",
+    "zumo": "jugo",
+    "jugo": "jugo",
 
     "patata": "papa",
     "patatas": "papas",
 
     "maíz": "elote",
-    "mazorca": "elote",
-
-    "judía": "frijol",
-    "judías": "frijoles",
-    "frijoles": "frijoles",
-
-    "garbanzo": "garbanzo",
 
     "aguacate": "aguacate",
 
-    "zumo": "jugo",
-
-    "refresco": "soda",
-    "refresco de cola": "soda",
-
-    "cerveza": "chela",
-
-    "agua": "agua",
-
-    "café": "cafecito",
-
-    "carne": "carne",
-    "pollo": "pollo",
-    "pescado": "pescado",
-
-    "huevo": "huevo",
-    "huevos": "huevos",
-
-    "queso": "queso",
-
-    "leche": "leche",
-
-    "arroz": "arroz",
-
-    "sopa": "caldo",
-
-    "picante": "picoso",
-
-    "dulce": "dulce",
-
-    "chocolate": "chocolate",
-
-    "helado": "nieve",
-
-    "palomitas": "palomitas",
+    "frijol": "frijol",
+    "judía": "frijol",
+    "judías": "frijoles",
 
     "cacahuete": "cacahuate",
-    "cacahuetes": "cacahuates",
-
-    "fresa": "fresa",
-    "fresas": "fresas",
-
-    "melocotón": "durazno",
-    "melocotones": "duraznos",
-
-    "albaricoque": "chabacano",
-
-    "melón": "melón",
-    "sandía": "sandía",
 
     "plátano": "plátano",
     "banana": "plátano",
 
-    "piña": "piña",
+    "fresa": "fresa",
 
-    "mandarina": "mandarina",
+    "melocotón": "durazno",
 
-    /* =========================
-       ROPA
-    ========================= */
+    "melón": "melón",
 
-    "camiseta": "playera",
-    "camisa": "camisa",
+    "sandía": "sandía",
 
-    "chaqueta": "chamarra",
-    "abrigo": "chamarra",
+    "carne": "carne",
 
-    "sudadera": "sudadera",
+    "pollo": "pollo",
 
-    "pantalones": "pantalones",
-    "vaqueros": "jeans",
+    "refresco": "refresco",
+
+    "cerveza": "chela",
+
+    "dinero": "lana",
+
+    "comida": "comida",
+
+
+    /* ROPA */
 
     "zapatillas": "tenis",
     "zapatillas deportivas": "tenis",
 
-    "zapatos": "zapatos",
-
     "chanclas": "chanclas",
 
-    "calcetines": "calcetas",
+    "camiseta": "playera",
 
-    "ropa interior": "calzones",
+    "chaqueta": "chamarra",
 
-    "bañador": "traje de baño",
+    "sudadera": "sudadera",
+
+    "pantalones": "pantalones",
+
+    "vaqueros": "jeans",
 
     "gorra": "gorra",
 
-    "sombrero": "sombrero",
+    "calcetines": "calcetas",
 
-    /* =========================
-       LUGARES
-    ========================= */
+
+    /* LUGARES */
 
     "piscina": "pileta",
-    "playa": "playa",
-
-    "mar": "mar",
 
     "tienda": "tiendita",
-    "supermercado": "súper",
-
-    "mercado": "tianguis",
 
     "trabajo": "chamba",
+
     "oficina": "chamba",
-
-    "escuela": "escuela",
-    "instituto": "prepa",
-
-    "universidad": "uni",
-
-    "parque": "parque",
-
-    "plaza": "plaza",
 
     "calle": "calle",
 
-    "barrio": "barrio",
+    "carretera": "carretera",
+
+    "plaza": "plaza",
+
+    "parque": "parque",
 
     "pueblo": "pueblito",
 
-    "ciudad": "ciudad",
+    "casa": "cantón",
 
-    "restaurante": "restaurante",
 
-    "bar": "antro",
-
-    "discoteca": "antro",
-
-    "fiesta": "peda",
-
-    "iglesia": "iglesia",
-
-    "hospital": "hospital",
-
-    "farmacia": "farmacia",
-
-    /* =========================
-       VERBOS
-    ========================= */
+    /* VERBOS */
 
     "trabajar": "chambear",
-    "trabajo": "chamba",
 
     "conducir": "manejar",
-    "conducir": "manejar",
+
+    "manejar": "manejar",
 
     "coger": "agarrar",
+
     "agarrar": "agarrar",
 
     "mirar": "ver",
-    "observar": "ver",
+
+    "ver": "ver",
 
     "hablar": "platicar",
-    "conversar": "platicar",
 
-    "beber": "tomar",
-    "tomar": "tomar",
+    "conversar": "platicar",
 
     "comer": "comer",
 
-    "andar": "andar",
+    "beber": "tomar",
 
-    "caminar": "andar",
+    "tomar": "tomar",
 
-    "correr": "correr",
+    "ir": "irse",
 
-    "saltar": "brincar",
+    "venir": "venir",
 
-    "tirar": "avent ar",
+    "llegar": "llegar",
 
-    "lanzar": "aventar",
+    "salir": "salir",
+
+    "esperar": "esperar",
 
     "buscar": "buscar",
-
-    "encontrar": "hallar",
 
     "tener": "tener",
 
@@ -613,59 +428,13 @@ const diccionario = {
 
     "terminar": "acabar",
 
-    "esperar": "esperar",
 
-    "llegar": "llegar",
-
-    "salir": "salir",
-
-    "entrar": "entrar",
-
-    "venir": "venir",
-
-    "ir": "irse",
-
-    "volver": "regresar",
-
-    "regresar": "regresar",
-
-    "dormir": "jalar",
-
-    "descansar": "descansar",
-
-    "enfadarse": "enojarse",
-
-    "enfadado": "enojado",
-
-    "reír": "reírse",
-
-    "llorar": "llorar",
-
-    "romper": "quebrar",
-
-    "arreglar": "componer",
-
-    "comprar": "comprar",
-
-    "vender": "vender",
-
-    "pagar": "pagar",
-
-    "costar": "valer",
-
-    "gustar": "gustar",
-
-    "ayudar": "echar la mano",
-
-    /* =========================
-       ADJETIVOS
-    ========================= */
+    /* ADJETIVOS */
 
     "bonito": "chido",
     "bonita": "chida",
 
     "genial": "chido",
-    "genial": "padre",
 
     "bueno": "chido",
     "buena": "chida",
@@ -680,251 +449,35 @@ const diccionario = {
     "pequeña": "chiquita",
 
     "grande": "grandote",
-    "enorme": "grandote",
 
     "rápido": "recio",
     "rápida": "recio",
 
-    "lento": "despacio",
-
     "fácil": "papita",
 
-    "difícil": "pesado",
+    "difícil": "cabrón",
 
-    "caliente": "calientito",
 
-    "frío": "frío",
-
-    "cansado": "cansado",
-
-    "feliz": "contento",
-
-    "triste": "agüitado",
-
-    "enfadado": "encabronado",
-
-    "borracho": "pedo",
-    "borracha": "peda",
-
-    "loco": "loco",
-    "loca": "loca",
-
-    "inteligente": "listo",
-
-    "tonto": "mensito",
-
-    /* =========================
-       DINERO
-    ========================= */
-
-    "dinero": "lana",
-    "euros": "varos",
-    "euro": "varo",
-
-    "monedas": "morralla",
-    "moneda": "varo",
-
-    "caro": "caro",
-    "barato": "barato",
-
-    "gratis": "de a gratis",
-
-    "pagar": "aflojar",
-
-    /* =========================
-       COLEGIO
-    ========================= */
-
-    "colegio": "escuela",
-    "instituto": "prepa",
-    "profesor": "profe",
-    "profesora": "profe",
-
-    "alumno": "estudiante",
-    "alumna": "estudiante",
-
-    "examen": "examen",
-    "deberes": "tarea",
-    "tarea": "tarea",
-
-    "recreo": "receso",
-    "asignatura": "materia",
-
-    "clase": "clase",
-
-    "nota": "calificación",
-
-    "suspender": "reprobar",
-    "aprobar": "pasar",
-
-    /* =========================
-       OBJETOS
-    ========================= */
-
-    "bolígrafo": "pluma",
-    "rotulador": "plumón",
-    "lápiz": "lápiz",
-
-    "mochila": "mochila",
-
-    "papel": "hoja",
-
-    "ordenador": "computadora",
-
-    "pantalla": "monitor",
-
-    "televisión": "tele",
-
-    "mando": "control",
-
-    "enchufe": "contacto",
-
-    "llave": "llave",
-
-    "dinero": "lana",
-
-    "cartera": "billetera",
-
-    "bolso": "bolsa",
-
-    "cuchara": "cuchara",
-    "tenedor": "tenedor",
-    "cuchillo": "cuchillo",
-
-    /* =========================
-       ANIMALES
-    ========================= */
-
-    "perro": "perro",
-    "gato": "gato",
-
-    "pájaro": "pájaro",
-    "ave": "pájaro",
-
-    "cerdo": "cochino",
-    "vaca": "vaca",
-
-    "caballo": "caballo",
-
-    "burro": "burro",
-
-    "pollo": "pollo",
-
-    "gallina": "gallina",
-
-    "pez": "pez",
-
-    "pez grande": "pescadote",
-
-    "serpiente": "culebra",
-
-    "rana": "rana",
-
-    "ratón": "ratón",
-
-    "conejo": "conejo",
-
-    /* =========================
-       TIEMPO
-    ========================= */
-
-    "ahora": "ahorita",
-
-    "ahora mismo": "ahorita",
-
-    "después": "al rato",
-    "luego": "al rato",
-
-    "mañana": "mañana",
-
-    "ayer": "ayer",
-
-    "hoy": "hoy",
-
-    "enseguida": "ahorita",
-
-    "pronto": "al rato",
-
-    "mucho tiempo": "un buen rato",
-
-    "siempre": "siempre",
-
-    "nunca": "nunca",
-
-    /* =========================
-       CANTIDADES
-    ========================= */
-
-    "mucho": "un chorro",
-    "mucha": "un chorro",
-    "muchos": "un chorro",
-    "muchas": "un chorro",
-
-    "poco": "poquito",
-    "poca": "poquita",
-
-    "bastante": "un buen",
-
-    "demasiado": "un chorro",
-
-    "nada": "nel",
-
-    "todo": "todo",
-
-    /* =========================
-       LUGARES / DIRECCIONES
-    ========================= */
-
-    "aquí": "acá",
-    "allí": "allá",
-    "ahí": "allá",
-
-    "arriba": "arriba",
-    "abajo": "abajo",
-
-    "dentro": "adentro",
-    "fuera": "afuera",
-
-    "cerca": "cerquita",
-    "lejos": "lejos",
-
-    /* =========================
-       EXPRESIONES
-    ========================= */
+    /* EXPRESIONES */
 
     "hola": "qué onda",
-
-    "buenos días": "qué onda",
-
-    "buenas tardes": "qué onda",
-
-    "buenas noches": "qué onda",
-
     "adiós": "ahí nos vemos",
 
-    "hasta luego": "ahí nos vemos",
+    "gracias": "gracias",
 
-    "nos vemos": "ahí nos vemos",
+    "por favor": "porfa",
 
-    "qué pasa": "qué onda",
-
-    "qué tal": "qué onda",
-
-    "cómo estás": "qué onda",
+    "de nada": "no hay de qué",
 
     "vale": "órale",
 
     "ok": "órale",
 
-    "de acuerdo": "órale",
-
-    "claro": "simón",
-
     "sí": "simón",
 
     "no": "nel",
 
-    "nunca": "nel",
+    "claro": "simón",
 
     "vamos": "ándale",
 
@@ -936,350 +489,15 @@ const diccionario = {
 
     "mira": "ándale mira",
 
-    "por favor": "porfa",
+    "qué pasa": "qué onda",
 
-    "gracias": "gracias",
+    "qué tal": "qué onda",
 
-    "muchas gracias": "mil gracias",
+    "mucho": "un chorro",
 
-    "de nada": "no hay de qué",
+    "muchos": "un chorro",
 
-    "no pasa nada": "no hay bronca",
-
-    "no hay problema": "no hay bronca",
-
-    "qué miedo": "qué susto",
-
-    "qué suerte": "qué suerte",
-
-    "qué bonito": "qué chido",
-
-    "qué guay": "qué chido",
-
-    "muy bien": "a toda madre",
-
-    "muy bueno": "a toda madre",
-
-    "en serio": "de neta",
-
-    "de verdad": "de neta",
-
-    "es verdad": "es neta",
-
-    "mentira": "choro",
-
-    "es mentira": "es puro choro",
-
-    "broma": "cura",
-
-    "estás bromeando": "estás echando cura",
-
-    "qué risa": "qué cura",
-
-    "qué divertido": "qué cura",
-
-    "tengo hambre": "tengo un chorro de hambre",
-
-    "tengo sed": "tengo un chorro de sed",
-
-    "tengo sueño": "tengo sueño",
-
-    "estoy cansado": "ando cansado",
-
-    "estoy cansada": "ando cansada",
-
-    "estoy enfadado": "ando enojado",
-
-    "estoy enfadada": "ando enojada",
-
-    "qué quieres": "qué ocupas",
-
-    "qué necesitas": "qué ocupas",
-
-    "no sé": "quién sabe",
-
-    "no tengo idea": "quién sabe",
-
-    "espera": "aguanta",
-
-    "espera un momento": "aguanta tantito",
-
-    "un momento": "tantito",
-
-    "ven aquí": "vente acá",
-
-    "vete": "órale, vete",
-
-    "cuidado": "aguas",
-
-    "ten cuidado": "aguas",
-
-    "mira eso": "mira nomás",
-
-    "qué pasa aquí": "qué onda aquí",
-
-    "qué demonios": "qué chingados",
-
-    "maldita sea": "chingada madre",
-
-    "genial": "qué chido",
-
-    "perfecto": "de lujo",
-
-    "está bien": "está chido",
-
-    "muy bien": "órale",
-
-    "buena suerte": "que te vaya chido",
-
-    /* =========================
-       PALABRAS MUY PANCHITAS
-    ========================= */
-
-    "problema": "bronca",
-
-    "problemas": "broncas",
-
-    "trabajo": "chamba",
-
-    "dinero": "lana",
-
-    "fiesta": "peda",
-
-    "borrachera": "peda",
-
-    "borracho": "pedo",
-
-    "borracha": "peda",
-
-    "amigo": "carnal",
-
-    "amigos": "carnales",
-
-    "chico": "chavo",
-
-    "chica": "chava",
-
-    "niño": "chamaco",
-
-    "niña": "chamaca",
-
-    "cosa": "vaina",
-
-    "montón": "chorro",
-
-    "muchísimo": "un chorro",
-
-    "persona": "vato",
-
-    "mujer": "morra",
-
-    "hombre": "vato",
-
-    "niño pequeño": "morro",
-
-    "niña pequeña": "morrita",
-
-    "cansancio": "flojera",
-
-    "pereza": "flojera",
-
-    "enfado": "coraje",
-
-    "enfadarse": "encabronarse",
-
-    "sorpresa": "sorpresota",
-
-    "miedo": "susto",
-
-    "vergüenza": "pena",
-
-    "cotilleo": "chisme",
-
-    "chisme": "chisme",
-
-    "mentira": "choro",
-
-    "excusa": "pretexto",
-
-    "favor": "paro",
-
-    "ayuda": "paro",
-
-    "ayudar": "echar la mano",
-
-    "beso": "beso",
-
-    "abrazo": "apapacho",
-
-    "apretón": "apapacho",
-
-    "amor": "cariño",
-
-    "novio": "vato",
-
-    "novia": "morra",
-
-    "amable": "buena onda",
-
-    "simpático": "buena onda",
-
-    "simpática": "buena onda",
-
-    "antipático": "mala onda",
-
-    "antipática": "mala onda",
-
-    "divertido": "cura",
-
-    "aburrido": "tedioso",
-
-    "fácil": "papita",
-
-    "difícil": "cabrón",
-
-    "muy difícil": "está cabrón",
-
-    "muy bueno": "está chido",
-
-    "muy malo": "está gacho",
-
-    "perfecto": "a toda madre",
-
-    "fantástico": "a toda madre",
-
-    /* =========================
-       NÚMEROS / CANTIDADES
-    ========================= */
-
-    "cien": "cien",
-    "mil": "mil",
-
-    "uno": "uno",
-    "dos": "dos",
-    "tres": "tres",
-    "cuatro": "cuatro",
-    "cinco": "cinco",
-    "seis": "seis",
-    "siete": "siete",
-    "ocho": "ocho",
-    "nueve": "nueve",
-    "diez": "diez",
-
-    /* =========================
-       PALABRAS COTIDIANAS
-    ========================= */
-
-    "cosa": "vaina",
-    "cosas": "vainas",
-
-    "verdad": "neta",
-
-    "realmente": "de neta",
-
-    "quizás": "chance",
-
-    "quizá": "chance",
-
-    "tal vez": "chance",
-
-    "suerte": "chance",
-
-    "oportunidad": "chance",
-
-    "persona": "raza",
-
-    "grupo": "raza",
-
-    "amigos": "la raza",
-
-    "muchacho": "chavo",
-
-    "muchacha": "chava",
-
-    "niño": "morro",
-
-    "niña": "morra",
-
-    "bebé": "morro",
-
-    "joven": "morrito",
-
-    "señor": "don",
-
-    "señora": "doña",
-
-    "dinero": "lana",
-
-    "monedas": "morralla",
-
-    "problema": "bronca",
-
-    "favor": "paro",
-
-    "ayuda": "paro",
-
-    "trabajo": "chamba",
-
-    "fiesta": "peda",
-
-    "amigo": "carnal",
-
-    "coche": "carro",
-
-    "piscina": "pileta",
-
-    "zumo": "jugo",
-
-    "patata": "papa",
-
-    "camiseta": "playera",
-
-    "zapatillas": "tenis",
-
-    "ordenador": "computadora",
-
-    "móvil": "celular",
-
-    "autobús": "camión",
-
-    "conducir": "manejar",
-
-    "trabajar": "chambear",
-
-    "hablar": "platicar",
-
-    "saltar": "brincar",
-
-    "necesitar": "ocupar",
-
-    "volver": "regresar",
-
-    "estar enfadado": "estar enojado",
-
-    "enfadado": "enojado",
-
-    "enfadada": "enojada",
-
-    "enfadarse": "enojarse",
-
-    "tirar": "aventar",
-
-    "romper": "quebrar",
-
-    "arreglar": "componer",
-
-    "ayudar": "echar la mano",
-
-    "esperar": "aguantar",
-
-    "espera": "aguas",
-
-    "cuidado": "aguas",
-
-    "aquí": "acá",
-
-    "allí": "allá",
+    "muy": "bien",
 
     "ahora": "ahorita",
 
@@ -1287,25 +505,41 @@ const diccionario = {
 
     "luego": "al rato",
 
-    "mucho": "un chorro",
+    "enseguida": "ahorita",
 
-    "poco": "poquito",
+    "aquí": "acá",
 
-    "bastante": "un buen",
+    "allí": "allá",
 
-    "muy": "bien",
+    "allá": "allá",
 
-    "verdadero": "neto",
+    "dinero": "lana",
 
-    "verdadera": "neta",
+    "problema": "bronca",
 
-    "real": "neto",
+    "amigo": "carnal",
 
-    "realmente": "de neta"
+    "trabajo": "chamba",
+
+    "fiesta": "peda",
+
+    "borracho": "pedo",
+
+    "borracha": "peda",
+
+    "suerte": "suerte",
+
+    "mentira": "choro",
+
+    "broma": "cura",
+
+    "en serio": "de neta",
+
+    "de verdad": "de neta",
+
+    "muchas gracias": "mil gracias"
 
 };
-
-
 
 
 /*
@@ -1510,8 +744,4 @@ function copiar() {
 
 }
 
-</script>
-
-</body>
-</html>
-```
+</script></body></html>
