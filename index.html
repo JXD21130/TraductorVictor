@@ -1,0 +1,768 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Traductor Español ↔ Panchito</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        background: #101010;
+        color: white;
+        font-family: Arial, sans-serif;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .app {
+        width: 92%;
+        max-width: 1000px;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 5px;
+    }
+
+    .subtitulo {
+        text-align: center;
+        color: #888;
+        margin-bottom: 25px;
+    }
+
+    .selector {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    select {
+        padding: 12px 18px;
+        border-radius: 10px;
+        border: 1px solid #444;
+        background: #1c1c1c;
+        color: white;
+        font-size: 16px;
+    }
+
+    .flecha {
+        font-size: 25px;
+    }
+
+    .cajas {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .caja {
+        background: #191919;
+        border: 1px solid #333;
+        border-radius: 15px;
+        padding: 15px;
+    }
+
+    .titulo-caja {
+        color: #999;
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+
+    textarea {
+        width: 100%;
+        height: 250px;
+
+        resize: vertical;
+
+        background: transparent;
+        border: none;
+        outline: none;
+
+        color: white;
+
+        font-family: Arial, sans-serif;
+        font-size: 19px;
+    }
+
+    textarea::placeholder {
+        color: #555;
+    }
+
+    .botones {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    button {
+        flex: 1;
+
+        padding: 14px;
+
+        border-radius: 10px;
+        border: none;
+
+        background: white;
+        color: black;
+
+        font-size: 16px;
+        font-weight: bold;
+
+        cursor: pointer;
+    }
+
+    button:hover {
+        opacity: 0.85;
+    }
+
+    .secundario {
+        background: #222;
+        color: white;
+        border: 1px solid #444;
+    }
+
+    @media (max-width: 700px) {
+        .cajas {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <h1>Traductor Español ↔ Panchito</h1>
+
+    <div class="subtitulo">
+        Traductor de palabras y expresiones
+    </div>
+
+    <div class="selector">
+
+        <select id="direccion">
+            <option value="es-pan">
+                Español → Panchito
+            </option>
+
+            <option value="pan-es">
+                Panchito → Español
+            </option>
+        </select>
+
+        <span class="flecha">↔</span>
+
+    </div>
+
+
+    <div class="cajas">
+
+        <div class="caja">
+
+            <div class="titulo-caja">
+                ESPAÑOL / PANCHITO
+            </div>
+
+            <textarea
+                id="entrada"
+                placeholder="Escribe una frase..."
+            ></textarea>
+
+        </div>
+
+
+        <div class="caja">
+
+            <div class="titulo-caja">
+                TRADUCCIÓN
+            </div>
+
+            <textarea
+                id="salida"
+                placeholder="Aquí aparecerá la traducción..."
+                readonly
+            ></textarea>
+
+        </div>
+
+    </div>
+
+
+    <div class="botones">
+
+        <button onclick="traducir()">
+            Traducir
+        </button>
+
+        <button
+            class="secundario"
+            onclick="intercambiar()"
+        >
+            ↔ Intercambiar
+        </button>
+
+        <button
+            class="secundario"
+            onclick="copiar()"
+        >
+            Copiar
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/*
+====================================================
+                DICCIONARIO PANCHITO
+====================================================
+
+Formato:
+
+"español": "panchito"
+
+El diccionario inverso se genera automáticamente.
+*/
+
+
+const diccionario = {
+
+    /* PERSONAS */
+
+    "amigo": "carnal",
+    "amiga": "carnala",
+    "amigos": "carnales",
+    "amigas": "carnalas",
+
+    "niño": "chamaco",
+    "niña": "chamaca",
+    "niños": "chamacos",
+    "niñas": "chamacas",
+
+    "chico": "chavo",
+    "chica": "chava",
+    "chicos": "chavos",
+    "chicas": "chavas",
+
+    "padre": "jefe",
+    "madre": "jefa",
+
+    "papá": "jefe",
+    "mamá": "jefa",
+
+    "hombre": "vato",
+    "mujer": "morra",
+
+    "persona": "vato",
+
+
+    /* CASA */
+
+    "casa": "cantón",
+    "habitación": "cuarto",
+    "salón": "cuarto",
+
+    "coche": "carro",
+    "auto": "carro",
+    "automóvil": "carro",
+
+    "moto": "moto",
+
+    "piscina": "pileta",
+    "bañera": "tina",
+
+    "nevera": "refri",
+    "frigorífico": "refri",
+
+    "ordenador": "computadora",
+    "computadora": "computadora",
+
+    "móvil": "celular",
+    "teléfono": "celular",
+
+    "autobús": "camión",
+    "bus": "camión",
+
+    "avión": "avión",
+
+
+    /* COMIDA */
+
+    "zumo": "jugo",
+    "jugo": "jugo",
+
+    "patata": "papa",
+    "patatas": "papas",
+
+    "maíz": "elote",
+
+    "aguacate": "aguacate",
+
+    "frijol": "frijol",
+    "judía": "frijol",
+    "judías": "frijoles",
+
+    "cacahuete": "cacahuate",
+
+    "plátano": "plátano",
+    "banana": "plátano",
+
+    "fresa": "fresa",
+
+    "melocotón": "durazno",
+
+    "melón": "melón",
+
+    "sandía": "sandía",
+
+    "carne": "carne",
+
+    "pollo": "pollo",
+
+    "refresco": "refresco",
+
+    "cerveza": "chela",
+
+    "dinero": "lana",
+
+    "comida": "comida",
+
+
+    /* ROPA */
+
+    "zapatillas": "tenis",
+    "zapatillas deportivas": "tenis",
+
+    "chanclas": "chanclas",
+
+    "camiseta": "playera",
+
+    "chaqueta": "chamarra",
+
+    "sudadera": "sudadera",
+
+    "pantalones": "pantalones",
+
+    "vaqueros": "jeans",
+
+    "gorra": "gorra",
+
+    "calcetines": "calcetas",
+
+
+    /* LUGARES */
+
+    "piscina": "pileta",
+
+    "tienda": "tiendita",
+
+    "trabajo": "chamba",
+
+    "oficina": "chamba",
+
+    "calle": "calle",
+
+    "carretera": "carretera",
+
+    "plaza": "plaza",
+
+    "parque": "parque",
+
+    "pueblo": "pueblito",
+
+    "casa": "cantón",
+
+
+    /* VERBOS */
+
+    "trabajar": "chambear",
+
+    "conducir": "manejar",
+
+    "manejar": "manejar",
+
+    "coger": "agarrar",
+
+    "agarrar": "agarrar",
+
+    "mirar": "ver",
+
+    "ver": "ver",
+
+    "hablar": "platicar",
+
+    "conversar": "platicar",
+
+    "comer": "comer",
+
+    "beber": "tomar",
+
+    "tomar": "tomar",
+
+    "ir": "irse",
+
+    "venir": "venir",
+
+    "llegar": "llegar",
+
+    "salir": "salir",
+
+    "esperar": "esperar",
+
+    "buscar": "buscar",
+
+    "tener": "tener",
+
+    "hacer": "hacer",
+
+    "decir": "decir",
+
+    "saber": "saber",
+
+    "querer": "querer",
+
+    "necesitar": "ocupar",
+
+    "usar": "usar",
+
+    "empezar": "empezar",
+
+    "terminar": "acabar",
+
+
+    /* ADJETIVOS */
+
+    "bonito": "chido",
+    "bonita": "chida",
+
+    "genial": "chido",
+
+    "bueno": "chido",
+    "buena": "chida",
+
+    "malo": "gacho",
+    "mala": "gacha",
+
+    "feo": "gacho",
+    "fea": "gacha",
+
+    "pequeño": "chiquito",
+    "pequeña": "chiquita",
+
+    "grande": "grandote",
+
+    "rápido": "recio",
+    "rápida": "recio",
+
+    "fácil": "papita",
+
+    "difícil": "cabrón",
+
+
+    /* EXPRESIONES */
+
+    "hola": "qué onda",
+    "adiós": "ahí nos vemos",
+
+    "gracias": "gracias",
+
+    "por favor": "porfa",
+
+    "de nada": "no hay de qué",
+
+    "vale": "órale",
+
+    "ok": "órale",
+
+    "sí": "simón",
+
+    "no": "nel",
+
+    "claro": "simón",
+
+    "vamos": "ándale",
+
+    "venga": "ándale",
+
+    "rápido": "ándale",
+
+    "oye": "órale",
+
+    "mira": "ándale mira",
+
+    "qué pasa": "qué onda",
+
+    "qué tal": "qué onda",
+
+    "mucho": "un chorro",
+
+    "muchos": "un chorro",
+
+    "muy": "bien",
+
+    "ahora": "ahorita",
+
+    "después": "al rato",
+
+    "luego": "al rato",
+
+    "enseguida": "ahorita",
+
+    "aquí": "acá",
+
+    "allí": "allá",
+
+    "allá": "allá",
+
+    "dinero": "lana",
+
+    "problema": "bronca",
+
+    "amigo": "carnal",
+
+    "trabajo": "chamba",
+
+    "fiesta": "peda",
+
+    "borracho": "pedo",
+
+    "borracha": "peda",
+
+    "suerte": "suerte",
+
+    "mentira": "choro",
+
+    "broma": "cura",
+
+    "en serio": "de neta",
+
+    "de verdad": "de neta",
+
+    "muchas gracias": "mil gracias"
+
+};
+
+
+/*
+====================================================
+             DICCIONARIO INVERSO
+====================================================
+*/
+
+const inverso = {};
+
+for (const palabra in diccionario) {
+
+    const traduccion = diccionario[palabra];
+
+    /*
+    Solo ponemos la primera equivalencia
+    para evitar conflictos.
+    */
+
+    if (!inverso[traduccion]) {
+        inverso[traduccion] = palabra;
+    }
+}
+
+
+/*
+====================================================
+                 TRADUCCIÓN
+====================================================
+*/
+
+function traducir() {
+
+    const texto =
+        document.getElementById("entrada").value;
+
+    const direccion =
+        document.getElementById("direccion").value;
+
+
+    if (!texto.trim()) {
+
+        document.getElementById("salida").value = "";
+
+        return;
+    }
+
+
+    const diccionarioActual =
+        direccion === "es-pan"
+            ? diccionario
+            : inverso;
+
+
+    /*
+    Ordenamos por longitud.
+
+    Así:
+
+        "por favor"
+
+    se traduce antes que:
+
+        "por"
+
+    */
+
+    const palabras =
+        Object.keys(diccionarioActual)
+        .sort((a, b) => b.length - a.length);
+
+
+    let resultado = texto;
+
+
+    for (const palabra of palabras) {
+
+        /*
+        Escapar caracteres especiales
+        para crear una expresión regular.
+        */
+
+        const escapada =
+            palabra.replace(
+                /[.*+?^${}()|[\]\\]/g,
+                "\\$&"
+            );
+
+
+        const regex =
+            new RegExp(
+                "\\b" + escapada + "\\b",
+                "gi"
+            );
+
+
+        resultado =
+            resultado.replace(
+                regex,
+                coincidencia => {
+
+                    const traduccion =
+                        diccionarioActual[palabra];
+
+                    return mantenerMayusculas(
+                        coincidencia,
+                        traduccion
+                    );
+                }
+            );
+    }
+
+
+    document.getElementById("salida").value =
+        resultado;
+}
+
+
+/*
+====================================================
+            MANTENER MAYÚSCULAS
+====================================================
+*/
+
+function mantenerMayusculas(original, nuevo) {
+
+    if (
+        original === original.toUpperCase()
+    ) {
+        return nuevo.toUpperCase();
+    }
+
+
+    if (
+        original[0] ===
+        original[0].toUpperCase()
+    ) {
+
+        return (
+            nuevo.charAt(0).toUpperCase() +
+            nuevo.slice(1)
+        );
+    }
+
+
+    return nuevo;
+}
+
+
+/*
+====================================================
+                INTERCAMBIAR
+====================================================
+*/
+
+function intercambiar() {
+
+    const entrada =
+        document.getElementById("entrada");
+
+    const salida =
+        document.getElementById("salida");
+
+    const direccion =
+        document.getElementById("direccion");
+
+
+    const temporal =
+        entrada.value;
+
+
+    entrada.value =
+        salida.value;
+
+    salida.value =
+        temporal;
+
+
+    direccion.value =
+        direccion.value === "es-pan"
+            ? "pan-es"
+            : "es-pan";
+
+
+    traducir();
+}
+
+
+/*
+====================================================
+                    COPIAR
+====================================================
+*/
+
+function copiar() {
+
+    const texto =
+        document.getElementById("salida").value;
+
+
+    navigator.clipboard.writeText(texto);
+
+}
+
+</script>
+
+</body>
+</html>
+```
