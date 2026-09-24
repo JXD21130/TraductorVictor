@@ -156,6 +156,7 @@ button:hover { opacity: 0.85; }
     </div>
 </div>
 
+<script>
 const diccionario = {
     /* PERSONAS */
     "amigo": "carnal",
@@ -341,28 +342,27 @@ const diccionario = {
     "muchas gracias": "mil gracias"
 };
 
-<script>
-/* DICCIONARIO INVERSO */
 const inverso = {};
 
 for (const palabra in diccionario) {
     const traduccion = diccionario[palabra].toLowerCase();
-
     if (inverso[traduccion] === undefined) {
         inverso[traduccion] = palabra;
     }
 }
 
-/* ESCAPAR CARACTERES ESPECIALES */
 function escaparRegex(texto) {
     return texto.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-/* TRADUCCIÓN */
 function traducir() {
-    const texto = document.getElementById("entrada").value;
+    const entrada = document.getElementById("entrada");
     const salida = document.getElementById("salida");
     const direccion = document.getElementById("direccion").value;
+
+    if (!entrada || !salida) return;
+
+    const texto = entrada.value;
 
     if (texto.trim() === "") {
         salida.value = "";
@@ -371,8 +371,7 @@ function traducir() {
 
     const dic = direccion === "es-pan" ? diccionario : inverso;
 
-    const claves = Object.keys(dic)
-        .sort((a, b) => b.length - a.length);
+    const claves = Object.keys(dic).sort((a, b) => b.length - a.length);
 
     const letras = "A-Za-zÁÉÍÓÚÜÑáéíóúüñ";
 
@@ -387,17 +386,12 @@ function traducir() {
         regex,
         function(match, antes, encontrada) {
             const traduccion = dic[encontrada.toLowerCase()];
-
-            if (traduccion === undefined) {
-                return match;
-            }
-
+            if (traduccion === undefined) return match;
             return antes + mantenerMayusculas(encontrada, traduccion);
         }
     );
 }
 
-/* MAYÚSCULAS */
 function mantenerMayusculas(original, nuevo) {
     if (original === original.toUpperCase()) {
         return nuevo.toUpperCase();
@@ -413,14 +407,12 @@ function mantenerMayusculas(original, nuevo) {
     return nuevo;
 }
 
-/* INTERCAMBIAR */
 function intercambiar() {
     const entrada = document.getElementById("entrada");
     const salida = document.getElementById("salida");
     const direccion = document.getElementById("direccion");
 
     const temporal = entrada.value;
-
     entrada.value = salida.value;
     salida.value = temporal;
 
@@ -430,10 +422,8 @@ function intercambiar() {
     traducir();
 }
 
-/* COPIAR */
 async function copiar() {
     const texto = document.getElementById("salida").value;
-
     if (!texto) return;
 
     try {
