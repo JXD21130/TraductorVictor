@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Traductor Español ↔ Panchito</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: #101010;
+    color: white;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.app {
+    width: 92%;
+    max-width: 1000px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.subtitulo {
+    text-align: center;
+    color: #888;
+    margin-bottom: 25px;
+}
+
+.selector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+select {
+    padding: 12px 18px;
+    border-radius: 10px;
+    border: 1px solid #444;
+    background: #1c1c1c;
+    color: white;
+    font-size: 16px;
+}
+
+.flecha { font-size: 25px; }
+
+.cajas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.caja {
+    background: #191919;
+    border: 1px solid #333;
+    border-radius: 15px;
+    padding: 15px;
+}
+
+.titulo-caja {
+    color: #999;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+textarea {
+    width: 100%;
+    height: 250px;
+    resize: vertical;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    font-family: Arial, sans-serif;
+    font-size: 19px;
+}
+
+textarea::placeholder { color: #555; }
+
+.botones {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+button {
+    flex: 1;
+    padding: 14px;
+    border-radius: 10px;
+    border: none;
+    background: white;
+    color: black;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover { opacity: 0.85; }
+
+.secundario {
+    background: #222;
+    color: white;
+    border: 1px solid #444;
+}
+
+@media (max-width: 700px) {
+    .cajas { grid-template-columns: 1fr; }
+    .botones { flex-direction: column; }
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+    <h1>Traductor Español ↔ Pancho</h1>
+
+    <div class="subtitulo">
+        Traductor para hablar con panchos
+    </div>
+
+    <div class="selector">
+        <select id="direccion" onchange="traducir()">
+            <option value="es-pan">Español → Panchito</option>
+            <option value="pan-es">Panchito → Español</option>
+        </select>
+        <span class="flecha">↔</span>
+    </div>
+
+    <div class="cajas">
+        <div class="caja">
+            <div class="titulo-caja">ESPAÑOL / PANCHITO</div>
+            <textarea id="entrada" placeholder="Escribe una frase..." oninput="traducir()"></textarea>
+        </div>
+
+        <div class="caja">
+            <div class="titulo-caja">TRADUCCIÓN</div>
+            <textarea id="salida" placeholder="Aquí aparecerá la traducción..." readonly></textarea>
+        </div>
+    </div>
+
+    <div class="botones">
+        <button onclick="traducir()">Traducir</button>
+        <button class="secundario" onclick="intercambiar()">↔ Intercambiar</button>
+        <button class="secundario" onclick="copiar()">Copiar</button>
+    </div>
+</div>
+
+<script>
+const diccionario = {
+    /* PERSONAS */
+    "amigo": "carnal",
+    "amiga": "carnala",
+    "amigos": "carnales",
+    "amigas": "carnalas",
+    "niño": "chamaco",
+    "niña": "chamaca",
+    "niños": "chamacos",
+    "niñas": "chamacas",
+    "chico": "chavo",
+    "chica": "chava",
+    "chicos": "chavos",
+    "chicas": "chavas",
+    "padre": "jefe",
+    "madre": "jefa",
+    "papá": "jefe",
+    "mamá": "jefa",
+    "hombre": "vato",
+    "mujer": "morra",
+    "esa persona": "ese vato",
+    "una persona": "un vato",
+
+    /* CASA Y OBJETOS */
+    "casa": "cantón",
+    "habitación": "cuarto",
+    "salón": "cuarto",
+    "coche": "carro",
+    "auto": "carro",
+    "automóvil": "carro",
+    "moto": "moto",
+    "piscina": "pileta",
+    "bañera": "tina",
+    "nevera": "refri",
+    "frigorífico": "refri",
+    "ordenador": "computadora",
+    "computadora": "computadora",
+    "móvil": "celular",
+    "teléfono": "celular",
+    "autobús": "camión",
+    "bus": "camión",
+    "avión": "avión",
+
+    /* COMIDA */
+    "zumo": "jugo",
+    "jugo": "jugo",
+    "patata": "papa",
+    "patatas": "papas",
+    "maíz": "elote",
+    "aguacate": "aguacate",
+    "frijol": "frijol",
+    "judía": "frijol",
+    "judías": "frijoles",
+    "cacahuete": "cacahuate",
+    "plátano": "plátano",
+    "banana": "plátano",
+    "fresa": "fresa",
+    "melocotón": "durazno",
+    "melón": "melón",
+    "sandía": "sandía",
+    "carne": "carne",
+    "pollo": "pollo",
+    "refresco": "refresco",
+    "cerveza": "chela",
+    "dinero": "lana",
+    "comida": "comida",
+
+    /* ROPA */
+    "zapatillas": "tenis",
+    "zapatillas deportivas": "tenis",
+    "chanclas": "chanclas",
+    "camiseta": "playera",
+    "chaqueta": "chamarra",
+    "sudadera": "sudadera",
+    "pantalones": "pantalones",
+    "vaqueros": "jeans",
+    "gorra": "gorra",
+    "calcetines": "calcetas",
+
+    /* LUGARES */
+    "tienda": "tiendita",
+    "trabajo": "chamba",
+    "oficina": "chamba",
+    "calle": "calle",
+    "carretera": "carretera",
+    "plaza": "plaza",
+    "parque": "parque",
+    "pueblo": "pueblito",
+
+    /* VERBOS */
+    "trabajar": "chambear",
+    "conducir": "manejar",
+    "manejar": "manejar",
+    "coger": "agarrar",
+    "agarrar": "agarrar",
+    "mirar": "ver",
+    "ver": "ver",
+    "hablar": "platicar",
+    "conversar": "platicar",
+    "comer": "comer",
+    "beber": "tomar",
+    "tomar": "tomar",
+    "ir": "irse",
+    "venir": "venir",
+    "llegar": "llegar",
+    "salir": "salir",
+    "esperar": "esperar",
+    "buscar": "buscar",
+    "tener": "tener",
+    "hacer": "hacer",
+    "decir": "decir",
+    "saber": "saber",
+    "querer": "querer",
+    "necesitar": "ocupar",
+    "usar": "usar",
+    "empezar": "empezar",
+    "terminar": "acabar",
+    "tirar de cabeza": "aventar de clavado",
+    "tirado de cabeza": "aventado de clavado",
+    "tirar": "aventar",
+
+    /* ADJETIVOS */
+    "chulo": "chido",
+    "chula": "chida",
+    "bonito": "chido",
+    "bonita": "chida",
+    "genial": "chido",
+    "bueno": "chido",
+    "buena": "chida",
+    "malo": "gacho",
+    "mala": "gacha",
+    "feo": "gacho",
+    "fea": "gacha",
+    "pequeño": "chiquito",
+    "pequeña": "chiquita",
+    "grande": "grandote",
+    "rápido": "recio",
+    "rápida": "recio",
+    "fácil": "papita",
+
+    /* MISCELANEO */
+    "que tal": "que onda",
+    "que tal estas": "como andas",
+    "estas": "andas",
+
+    /* EXPRESIONES */
+    "hola": "qué onda",
+    "adiós": "ahí nos vemos",
+    "gracias": "gracias",
+    "por favor": "porfa",
+    "de nada": "no hay de qué",
+    "vale": "órale",
+    "ok": "órale",
+    "sí": "simón",
+    "no": "nel",
+    "claro": "simón",
+    "vamos": "ándale",
+    "venga": "ándale",
+    "oye": "órale",
+    "mira": "ándale mira",
+    "qué pasa": "qué onda",
+    "qué tal": "qué onda",
+    "mucho": "un chorro",
+    "muchos": "un chorro",
+    "muy": "bien",
+    "ahora": "ahorita",
+    "después": "al rato",
+    "luego": "al rato",
+    "enseguida": "ahorita",
+    "aquí": "acá",
+    "allí": "allá",
+    "allá": "allá",
+    "problema": "bronca",
+    "fiesta": "peda",
+    "borracho": "pedo",
+    "borracha": "peda",
+    "suerte": "suerte",
+    "mentira": "choro",
+    "broma": "cura",
+    "verdad": "neta",
+    "en serio": "de neta",
+    "de verdad": "de neta",
+    "muchas gracias": "mil gracias",
+
+    /* FAMILIA Y PERSONAS */
+    "hermano":"carnal","hermana":"carnala","hermanos":"carnales","hijo":"chamaco","hija":"chamaca","hijos":"chamacos",
+    "bebé":"escuincle","bebés":"escuincles","marido":"viejo","esposo":"viejo","mujer casada":"vieja","esposa":"vieja",
+    "novio":"galán","novia":"chava","abuelo":"abuelito","abuela":"abuelita","abuelos":"abuelitos","tío":"güey","tía":"morra","tíos":"weyes",
+    "colega":"compa","colegas":"compas","compañero":"compa","compañeros":"compas","gemelo":"cuate","gemelos":"cuates",
+    "tonto":"menso","tonta":"mensa","tontos":"mensos","idiota":"pendejo","idiotas":"pendejos","imbécil":"pendejo",
+    "policía":"tira","poli":"tira","policías":"tiras","ladrón":"ratero","ladrones":"rateros","chismoso":"lengüetas",
+    "guapo":"buenote","guapa":"buenota","viejo amigo":"carnalito","anciano":"ruco","ancianos":"rucos","abuelete":"ruco",
+    "jefe de trabajo":"patrón","pijo":"fresa","pija":"fresa","pijos":"fresas","hortera":"naco","ordinario":"naco","ordinaria":"naca",
+    "tacaño":"codo","tacaña":"coda","agarrado":"codo","loco":"zafado","loca":"zafada","locos":"zafados",
+    "perezoso":"huevón","perezosa":"huevona","vago":"huevón","vaga":"huevona","vagos":"huevones",
+    "bajito":"chaparro","bajita":"chaparra","calvo":"pelón","calva":"pelona","sucio":"cochino","sucia":"cochina",
+    "trabajador":"chambeador","trabajadora":"chambeadora","profesor":"maestro","profesora":"maestra","profesores":"maestros",
+    "vecino":"vecino","gente":"raza","vecinos":"vecinos","chismosa":"lengüetas","borrachín":"briago","cobarde":"gallina",
+
+    /* CUERPO */
+    "barriga":"panza","tripa":"panza","estómago":"panza","culo":"nalgas","trasero":"nalgas","pelo":"greña","cabello":"greña",
+    "boca":"hocico","cabeza":"coco","cerebro":"coco","cara":"jeta","pies":"patas","dinero en efectivo":"lana en efectivo",
+
+    /* CASA, OBJETOS Y COSAS */
+    "piso":"departamento","apartamento":"departamento","pisos":"departamentos","garaje":"cochera","ático":"azotea","terraza":"azotea",
+    "sofá":"sillón","váter":"baño","aseo":"baño","cuarto de baño":"baño","ducha":"regadera","grifo":"llave","grifos":"llaves",
+    "manta":"cobija","mantas":"cobijas","bombilla":"foco","bombillas":"focos","enchufe":"contacto","cubo":"cubeta","cubos":"cubetas",
+    "tirita":"curita","tiritas":"curitas","grapadora":"engrapadora","pegamento":"resistol","celo":"diurex","cinta adhesiva":"diurex",
+    "bolígrafo":"pluma","boli":"pluma","bolso":"bolsa","cartera":"billetera","cacharro":"chunche","trasto":"chunche","cosa":"chunche","cosas":"chunches",
+    "portátil":"laptop","tableta":"tablet","auriculares":"audífonos","cascos":"audífonos","ratón":"mouse","suelo":"piso",
+    "colchón":"colchón","almohada":"almohada","cortina":"cortina","cortinas":"cortinas","llaves de casa":"llaves del cantón",
+    "cabaña":"jacal","chabola":"jacal","mueble":"mueble","estantería":"repisa","estante":"repisa","balda":"repisa",
+    "fregadero":"tarja","escoba":"escoba","fregona":"trapeador","mopa":"trapeador","cerilla":"cerillo","cerillas":"cerillos",
+    "mechero":"encendedor","bolsa de basura":"bolsa de basura","basura":"basura","papelera":"bote de basura","cesto":"bote",
+    "lío":"relajo","desorden":"relajo","jaleo":"relajo","alboroto":"relajo","ruido":"ruidazo","juguete":"juguete","juguetes":"juguetes",
+
+    /* TRANSPORTE */
+    "maletero":"cajuela","capó":"cofre","neumático":"llanta","neumáticos":"llantas","rueda":"llanta","ruedas":"llantas",
+    "aparcar":"estacionar","aparcamiento":"estacionamiento","parking":"estacionamiento","atasco":"tráfico","acera":"banqueta","aceras":"banquetas",
+    "bicicleta":"bici","furgoneta":"camioneta","camioneta grande":"troca","conductor":"chofer","carné de conducir":"licencia",
+    "carnet de conducir":"licencia","gasolinera":"gasolinera","tren":"tren","billete":"boleto","billetes de tren":"boletos de tren",
+    "autobuses":"camiones","parada de autobús":"parada del camión","autostop":"aventón","dar un paseo en coche":"dar un aventón",
+    "llevar en coche":"dar un aventón","volante":"volante","embrague":"clutch","freno":"freno","matrícula":"placa","matrículas":"placas",
+
+    /* COMIDA Y BEBIDA */
+    "bocadillo":"torta","bocata":"torta","sándwich":"torta","tarta":"pastel","nata":"crema","guisantes":"chícharos","guisante":"chícharo",
+    "calabacín":"calabacita","judías verdes":"ejotes","alubias":"frijoles","pimiento":"chile","pimientos":"chiles","guindilla":"chile",
+    "albaricoque":"chabacano","albaricoques":"chabacanos","tomate":"jitomate","tomates":"jitomates","filete":"bistec","gamba":"camarón",
+    "gambas":"camarones","langostinos":"camarones","copa":"trago","copas":"tragos","cigarrillo":"cigarro","cigarrillos":"cigarros",
+    "golosinas":"dulces","caramelo":"dulce","caramelos":"dulces","chuches":"dulces","helado":"nieve","helados":"nieves",
+    "cerveza fría":"chela helada","cervezas":"chelas","café":"cafecito","comida rápida":"chatarra","cacahuetes":"cacahuates",
+    "fresas":"fresas","tortilla":"tortilla","tortillas":"tortillas","desayuno":"almuerzo","almuerzo":"comida","cena":"cena",
+    "merienda":"lonche","fiambrera":"lonchera","aperitivo":"botana","aperitivos":"botanas","tapas":"botanas","picoteo":"botana",
+    "patatas fritas":"papitas","patatas fritas de bolsa":"papitas","palomitas":"palomitas","chocolate":"chocolate","leche":"leche",
+    "alcohol":"chupe","emborracharse":"ponerse pedo","borrachera":"peda","resaca":"cruda","bar":"cantina","bares":"cantinas",
+    "discoteca":"antro","discotecas":"antros","chupito":"shot","tragos":"tragos","vaso":"vaso","botella":"botella","hielo":"hielo",
+    "jamón":"jamón","queso":"queso","huevo":"huevo","huevos":"blanquillos","pan":"pan","arroz":"arroz","sopa":"sopa","pescado":"pescado",
+    "guisar":"guisar","cocinar":"guisar","hambre":"hambre","tengo hambre":"tengo hambre","hambriento":"hambriento","sed":"sed",
+    "tequila":"tequila","mezcal":"mezcal","salsa picante":"salsa","picante":"picoso","pican":"pican","pica":"pica","muy picante":"bien picoso",
+
+    /* ROPA */
+    "cazadora":"chamarra","jersey":"suéter","jerséis":"suéteres","pantalón":"pantalón","pantalón corto":"short","bañador":"traje de baño",
+    "bikini":"bikini","bufanda":"bufanda","guantes":"guantes","botas":"botas","zapatos":"zapatos","zapato":"zapato","cinturón":"cinturón",
+    "gafas":"lentes","gafas de sol":"lentes de sol","lentillas":"lentes de contacto","pendientes":"aretes","pendiente":"arete",
+    "sujetador":"brasier","bragas":"calzones","calzoncillos":"calzones","pijama":"pijama","disfraz":"disfraz","chándal":"pants",
+
+    /* LUGARES Y COSAS DE LA CIUDAD */
+    "colegio":"escuela","cole":"escuela","instituto":"prepa","supermercado":"súper","mercado":"tianguis","mercadillo":"tianguis",
+    "centro comercial":"plaza comercial","barrio":"colonia","barrios":"colonias","urbanización":"colonia","ayuntamiento":"palacio municipal",
+    "estanco":"tabaquería","panadería":"panadería","carnicería":"carnicería","farmacia":"farmacia","hospital":"hospital","cárcel":"tambo",
+    "prisión":"tambo","comisaría":"la tira","campo":"rancho","finca":"rancho","granja":"rancho","montaña":"cerro","colina":"cerrito",
+    "playa":"playa","mar":"mar","río":"río","lago":"lago","ciudad":"ciudad","capital":"capital","lejos":"bien lejos","cerca":"cerquita",
+    "en medio de la nada":"donde el diablo perdió el sombrero","cementerio":"panteón","iglesia":"iglesia","baño público":"baño","sitio":"lugar",
+
+    /* ESCUELA Y TRABAJO */
+    "curro":"chamba","currar":"chambear","empleo":"chamba","deberes":"tarea","suspenso":"reprobado","suspender":"reprobar",
+    "aprobar":"pasar","jefe del trabajo":"patrón","sueldo":"raya","salario":"raya","nómina":"raya","paga":"raya","paro":"desempleo",
+    "despedir":"correr","despedido":"corrido","cansancio":"hueva","pereza":"hueva","me da pereza":"me da hueva","vaguear":"hueviar",
+    "holgazanear":"hueviar","reunión":"junta","reuniones":"juntas","horario":"turno","turno":"turno","jubilado":"jubilado",
+
+    /* VERBOS */
+    "entender":"cachar","comprender":"cachar","pillar":"cachar","captar":"cachar","atrapar":"cachar","revisar":"checar",
+    "comprobar":"checar","echar":"aventar","lanzar":"aventar","soportar":"aguantar","llorar":"chillar","robar":"transar",
+    "pegar":"madrear","golpear":"madrear","escapar":"pelarse","huir":"pelarse","largarse":"pelarse","marcharse":"pelarse",
+    "irse":"pelarse","molestar":"fregar","fastidiar":"fregar","enfadar":"enchilar","enfadarse":"enchilarse","asustar":"espantar",
+    "asustarse":"espantarse","preocupar":"apurar","preocuparse":"apurarse","cotillear":"chismear","besar":"besuquear",
+    "dormir":"echarse un coyotito","dormirse":"quedarse jetón","roncar":"roncar","ligar":"ligar","tirarse":"aventarse",
+    "gritar":"pegar de gritos","mentir":"choretear","fumar":"fumar","jugar":"jugar","bailar":"bailar","cantar":"cantar",
+    "pagar":"pagar","comprar":"comprar","gastar":"gastar","vender":"vender","regalar":"regalar","prestar":"prestar",
+    "flipar":"alucinar","joder":"chingar","fregar":"fregar","chismorrear":"chismear","cortar":"cortar","lavar":"lavar",
+    "estudiar":"estudiar","aprender":"aprender","olvidar":"olvidar","recordar":"acordarse","recuerdo":"me acuerdo",
+    "quedar":"quedar","quedarse":"quedarse","dejar":"dejar","subir":"subir","bajar":"bajar","meter":"meter","sacar":"sacar",
+    "estar":"andar","estoy":"ando","estás":"andas","está":"anda","estamos":"andamos","están":"andan","estáis":"andan",
+    "estaba":"andaba","estuve":"anduve","estuvo":"anduvo","estando":"andando","voy":"voy","cocinaba":"guisaba",
+    "me gusta":"me late","te gusta":"te late","le gusta":"le late","nos gusta":"nos late","les gusta":"les late",
+    "no me gusta":"no me late","gustar":"latir","me encanta":"me late un buen","adoro":"me late un buen",
+    "coger frío":"agarrar frío","tener miedo":"tener jiribilla","tener ganas":"tener ganas","tengo ganas":"tengo ganas",
+    "aparecer":"caer","llegar tarde":"llegar tarde","ir a pie":"ir caminando","andar":"caminar","caminar":"caminar",
+    "echar de menos":"extrañar","añorar":"extrañar","echar una mano":"echar la mano","ayudar":"echar la mano",
+    "cotilleo":"chisme","chisme":"chisme","pedir prestado":"pedir prestado","aparentar":"aparentar","presumir":"presumir",
+
+    /* ADJETIVOS Y ADVERBIOS */
+    "guay":"chido","mola":"está chido","estupendo":"padrísimo","fantástico":"padrísimo","excelente":"padrísimo",
+    "enfadado":"enchilado","enojado":"enchilado","enfadada":"enchilada","enojada":"enchilada","cansado":"molido","cansada":"molida",
+    "cutre":"chafa","de mala calidad":"chafa","pésimo":"de la fregada","malísimo":"de la fregada","asqueroso":"asqueroso",
+    "raro":"extraño","sucio y desordenado":"cochinero","aburrido":"aburrido","gracioso":"chistoso","divertido":"chido",
+    "gratis":"de a gratis","barato":"baratito","carísimo":"carísimo","demasiado":"un buen","bastante":"harto","muchísimo":"un buen",
+    "poco":"poquito","pocos":"poquitos","despacio":"despacito","deprisa":"aprisa","de prisa":"aprisa","pronto":"orita",
+    "solo":"solito","sola":"solita","tal vez":"a lo mejor","quizá":"a lo mejor","quizás":"a lo mejor","cerca de aquí":"por acá",
+    "de acuerdo":"sale","está bien":"está chido","muy bien":"bien padre","vale la pena":"vale la pena","por supuesto":"simón",
+    "claro que sí":"simón que sí","claro que no":"nel pastel","ni de broma":"ni madres","para nada":"para nada","cuidado":"aguas",
+    "ten cuidado":"aguas","tened cuidado":"aguas","atento":"buzo","espabilado":"buzo","listo":"buzo","espabila":"aguas",
+    "mismo":"mero","misma":"mera","ahora mismo":"ahorita mismo","ya mismo":"ahorita","dentro de poco":"al ratito",
+    "un momento":"un ratito","un segundo":"tantito","un poco":"tantito","un poquito":"tantito","hoy":"hoy","tarde":"tarde",
+    "esta noche":"hoy en la noche","esta tarde":"hoy en la tarde","esta mañana":"hoy en la mañana","por la mañana":"en la mañana",
+    "por la tarde":"en la tarde","por la noche":"en la noche","de repente":"de a tiro","de pronto":"de repente","a veces":"a ratos",
+    "de vez en cuando":"de vez en cuando","siempre":"siempre","nunca":"nunca","jamás":"nunca","también":"también","tampoco":"tampoco",
+    "de todas formas":"de todos modos","en fin":"en fin","o sea":"o sea","es decir":"o sea","por eso":"por eso","pues":"pues",
+    "verdadero":"neto","falso":"chueco","torcido":"chueco","tuerto":"chueco","recto":"derechito","derecho":"derecho","igual":"igual",
+
+    /* EXPRESIONES Y FRASES */
+    "buenos días":"buenos días","buenas tardes":"buenas tardes","buenas noches":"buenas noches","hasta luego":"ahí nos vemos",
+    "nos vemos":"ahí nos vidrios","hasta pronto":"al ratito","hasta mañana":"hasta mañana","chao":"ahí nos vemos","cómo estás":"cómo andas",
+    "cómo estáis":"cómo andan","cómo está":"cómo anda","qué haces":"qué haces","qué hay":"qué onda","qué tal todo":"cómo andas",
+    "no pasa nada":"no hay pedo","no hay problema":"no hay bronca","sin problema":"sin bronca","no importa":"no hay pedo",
+    "no me importa":"me vale","me da igual":"me vale","me importa un pimiento":"me vale madres","no te preocupes":"no te apures",
+    "tranquilo":"tranqui","tranquila":"tranqui","espera":"aguanta","espérate":"aguántame","ven aquí":"ven pa'cá","ven":"ven",
+    "vete":"lárgate","lárgate":"lárgate","cállate":"cállate el hocico","silencio":"shhh","lo siento":"perdón","perdón":"disculpa",
+    "disculpa":"disculpa","disculpe":"disculpe","qué asco":"qué gacho","qué guay":"qué chido","qué bien":"qué padre",
+    "qué mal":"qué gacho","qué susto":"qué espanto","qué vergüenza":"qué oso","vergüenza":"oso","ridículo":"oso","hacer el ridículo":"hacer el oso",
+    "qué lástima":"qué mala onda","qué pena":"qué mala onda","mala suerte":"mala onda","mala onda":"mala onda","buena onda":"buena onda",
+    "hostia":"chin","hostias":"chin","ostras":"chin","caramba":"órale","vaya":"órale","anda":"órale","toma":"toma","uf":"uf",
+    "madre mía":"ay caray","dios mío":"ay Dios","ay dios":"ay Dios","ojalá":"ojalá","por Dios":"por Dios","gracias a Dios":"gracias a Dios",
+    "mierda":"chingada","coño":"chin","jodido":"fregado","joder tío":"chin güey","en serio tío":"en serio güey","es verdad":"es neta",
+    "es mentira":"es choro","no me lo creo":"no manches","no puede ser":"no manches","increíble":"no manches","no me digas":"no manches",
+    "no jodas":"no manches","en absoluto":"para nada","de ninguna manera":"ni madres","por favor":"porfa","si quieres":"si quieres",
+    "eso es":"eso es","eso sí":"eso sí","a mí me da igual":"a mí me vale","lo que sea":"lo que sea","qué remedio":"qué remedio",
+    "ya está":"ya estuvo","ya estuvo":"ya estuvo","se acabó":"ya estuvo","se acabo":"ya estuvo","qué fuerte":"qué fuerte",
+    "vamos allá":"ándale pues","venga ya":"no manches","de verdad de la buena":"de neta","fenomenal":"padrísimo","estupendamente":"padrísimo",
+    "gracias por todo":"mil gracias","a tu salud":"salud","salud":"salud","enhorabuena":"felicidades","felicidades":"felicidades",
+    "buen provecho":"buen provecho","que aproveche":"buen provecho","que te vaya bien":"que te vaya bien","cuídate":"cuídate",
+    "cómo te llamas":"cómo te llamas","de dónde eres":"de dónde eres","dónde vives":"dónde vives","cuántos años tienes":"cuántos años tienes",
+    "tío qué haces":"güey qué haces","oye tío":"oye güey","mira tío":"mira güey","tío":"güey","chaval":"morro","chavales":"morros",
+    "chaval joven":"morro","adolescente":"morro","joven":"morro","jóvenes":"morros","muchacho":"morro","muchacha":"morra","muchachos":"morros",
+    "jefazo":"jefazo","maestro":"maestro","genio":"chingón","crack":"chingón","campeón":"campeón","máquina":"chingón",
+    "tremendo":"chingón","tremenda":"chingona","brutal":"chingón","alucinante":"chingón","impresionante":"chingón"
+};
+
+const inverso = {};
+
+for (const palabra in diccionario) {
+    const traduccion = diccionario[palabra].toLowerCase();
+    if (inverso[traduccion] === undefined) {
+        inverso[traduccion] = palabra;
+    }
+}
+
+function escaparRegex(texto) {
+    return texto.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function traducir() {
+    const entrada = document.getElementById("entrada");
+    const salida = document.getElementById("salida");
+    const direccion = document.getElementById("direccion").value;
+
+    if (!entrada || !salida) return;
+
+    const texto = entrada.value;
+
+    if (texto.trim() === "") {
+        salida.value = "";
+        return;
+    }
+
+    const dic = direccion === "es-pan" ? diccionario : inverso;
+
+    const claves = Object.keys(dic).sort((a, b) => b.length - a.length);
+
+    const letras = "A-Za-zÁÉÍÓÚÜÑáéíóúüñ";
+
+    const patron =
+        "(^|[^" + letras + "])(" +
+        claves.map(escaparRegex).join("|") +
+        ")(?=$|[^" + letras + "])";
+
+    const regex = new RegExp(patron, "gi");
+
+    salida.value = texto.replace(
+        regex,
+        function(match, antes, encontrada) {
+            const traduccion = dic[encontrada.toLowerCase()];
+            if (traduccion === undefined) return match;
+            return antes + mantenerMayusculas(encontrada, traduccion);
+        }
+    );
+}
+
+function mantenerMayusculas(original, nuevo) {
+    if (original === original.toUpperCase()) {
+        return nuevo.toUpperCase();
+    }
+
+    if (
+        original.length > 0 &&
+        original[0] === original[0].toUpperCase()
+    ) {
+        return nuevo.charAt(0).toUpperCase() + nuevo.slice(1);
+    }
+
+    return nuevo;
+}
+
+function intercambiar() {
+    const entrada = document.getElementById("entrada");
+    const salida = document.getElementById("salida");
+    const direccion = document.getElementById("direccion");
+
+    const temporal = entrada.value;
+    entrada.value = salida.value;
+    salida.value = temporal;
+
+    direccion.value =
+        direccion.value === "es-pan" ? "pan-es" : "es-pan";
+
+    traducir();
+}
+
+async function copiar() {
+    const texto = document.getElementById("salida").value;
+    if (!texto) return;
+
+    try {
+        await navigator.clipboard.writeText(texto);
+    } catch {
+        const salida = document.getElementById("salida");
+        salida.select();
+        document.execCommand("copy");
+    }
+}
+</script>
+</body>
+</html>
